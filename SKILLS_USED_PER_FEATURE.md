@@ -8,3 +8,5 @@
 | Modular Core | Senior Fullstack |
 | Routes Bridge | WordPress Plugin Development |
 | Elementor Integration | Frontend Design |
+| Workflow & DTO/ETL | Backend logic & Data Engineering |
+| Rate Limiting & Queueing | System Architecture |

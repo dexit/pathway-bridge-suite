@@ -34,7 +34,6 @@ class Logger extends Singleton {
 	}
 
 	public static function logs( $lines = 500 ) {
-		if ( ! self::is_active() ) return array();
 		$log_path = self::log_path();
 		if ( ! file_exists( $log_path ) ) return array();
 
@@ -43,10 +42,8 @@ class Logger extends Singleton {
 	}
 
 	public static function log( $data, $level = 'DEBUG' ) {
-		if ( ! self::is_active() ) return;
-		
 		if ( is_array( $data ) || is_object( $data ) ) {
-			$data = json_encode( $data, JSON_PRETTY_PRINT );
+			$data = json_encode( $data, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT );
 		}
 
 		$line = sprintf( "[%s] [%s] %s\n", date( 'Y-m-d H:i:s' ), $level, $data );
@@ -54,28 +51,10 @@ class Logger extends Singleton {
 	}
 
 	public static function is_active() {
-		return is_file( self::log_path() );
-	}
-
-	public static function activate() {
-		if ( ! self::is_active() ) {
-			touch( self::log_path() );
-		}
-	}
-
-	public static function deactivate() {
-		if ( self::is_active() ) {
-			wp_delete_file( self::log_path() );
-		}
+		return true; // Always active for now to ensure we capture initial setup
 	}
 
 	public static function setup() {
-		if ( self::is_active() ) {
-			error_reporting( E_ALL );
-			ini_set( 'log_errors', 1 );
-			ini_set( 'display_errors', 0 );
-			ini_set( 'error_log', self::log_path() );
-		}
 		return self::get_instance();
 	}
 

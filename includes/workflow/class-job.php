@@ -10,6 +10,7 @@ namespace PATHWAY_BRIDGE_SUITE\Workflow;
 use WP_Error;
 use WP_Post;
 use ReflectionFunction;
+use PATHWAY_BRIDGE_SUITE\Logger;
 use ParseError;
 use Error;
 
@@ -65,34 +66,42 @@ class Job {
 
 	public function run( $payload, $bridge ) {
 		$method  = $this->method;
-		
-		if ( ! function_exists( $method ) ) {
-			return $payload;
-		}
+		$snippet = $this->snippet;
 
 		try {
-			$payload = $method( $payload, $bridge, $this );
-		} catch ( \Exception $e ) {
+			if ( is_callable( $method ) ) {
+				$payload = call_user_func( $method, $payload, $bridge, $this );
+			} elseif ( ! empty( $snippet ) ) {
+				$payload = $this->execute_snippet( $snippet, $payload, $bridge );
+			}
+		} catch ( \Exception | Error $e ) {
+			Logger::log( "Job execution failed: " . $e->getMessage(), Logger::ERROR );
 			return new WP_Error( 'job_execution_failed', $e->getMessage() );
 		}
 
-		if ( $this->next ) {
+		if ( $this->next && ! is_wp_error( $payload ) && $payload !== null ) {
 			return $this->next->run( $payload, $bridge );
 		}
 
 		return $payload;
 	}
 
+	private function execute_snippet( $snippet, $payload, $bridge ) {
+		$job = $this;
+		// Ensure snippet is wrapped if it doesn't start with <?php
+		if ( strpos( trim( $snippet ), '<?php' ) !== 0 ) {
+			$snippet = '?>' . $snippet;
+		}
+
+		// The snippet should use $payload, $bridge and $job and return $payload
+		return eval( $snippet );
+	}
+
 	private function validate( $data ) {
-		// Simplified validation for now, will implement full schema check later
 		if ( ! isset( $data['name'] ) ) {
 			return new WP_Error( 'missing_name', 'Job name is required' );
 		}
 		
-		if ( ! isset( $data['method'] ) ) {
-			$data['method'] = function ( $p ) { return $p; };
-		}
-
 		return $data;
 	}
 

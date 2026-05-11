@@ -9,6 +9,7 @@ namespace PATHWAY_BRIDGE_SUITE\Modules\Routes;
 
 use PATHWAY_BRIDGE_SUITE\Registry;
 use PATHWAY_BRIDGE_SUITE\Workflow_Engine;
+use PATHWAY_BRIDGE_SUITE\Workflow\Transformer;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit();
@@ -37,8 +38,9 @@ class Routes_Module {
 				'name' => __( 'Routes Bridges', 'pathway-bridge-suite' ),
 			),
 			'public' => false,
-			'show_ui' => false,
+			'show_ui' => true,
 			'supports' => array( 'title', 'editor', 'excerpt' ),
+			'menu_icon' => 'dashicons-rest-api',
 		) );
 	}
 
@@ -57,21 +59,16 @@ class Routes_Module {
 	 * @return mixed
 	 */
 	public function process_request( $payload, $route_id ) {
-		$jobs = get_post_meta( $route_id, '_pbs_workflow_jobs', true ) ?: array();
-		
-		// Optionally apply DTO mapping here
+		// Apply DTO mapping first if defined
 		$mapping = get_post_meta( $route_id, '_pbs_mapping', true );
-		if ( $mapping ) {
-			$payload = $this->apply_mapping( $payload, $mapping );
+		if ( $mapping && is_array( $mapping ) ) {
+			$payload = Transformer::map( $payload, $mapping );
 		}
 
-		return Workflow_Engine::get_instance()->execute( $payload, $jobs, $this );
-	}
+		$jobs = get_post_meta( $route_id, '_pbs_workflow_jobs', true ) ?: array();
 
-	private function apply_mapping( $payload, $mapping ) {
-		// Implementation for DTO/ETL mapping
-		// (Will reuse the Field_Mapper logic from forms-bridge)
-		return $payload;
+		// Execute workflow
+		return Workflow_Engine::get_instance()->execute( $payload, $jobs, $this );
 	}
 }
 
