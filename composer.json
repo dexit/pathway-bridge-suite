@@ -1,0 +1,26 @@
+{
+  "name": "pathway/bridge-suite",
+  "description": "Unified connectivity hub for WordPress with Enterprise Workflow Engine",
+  "type": "wordpress-plugin",
+  "license": "GPL-2.0-or-later",
+  "require": {
+    "php": ">=8.0",
+    "automattic/jetpack-autoloader": "^2.0"
+  },
+  "require-dev": {
+    "yoast/phpunit-polyfills": "^4.0",
+    "phpunit/phpunit": "^9.0",
+    "squizlabs/php_codesniffer": "^3.13",
+    "wp-coding-standards/wpcs": "^3.0"
+  },
+  "scripts": {
+    "test": "vendor/bin/phpunit",
+    "lint": "vendor/bin/phpcs"
+  },
+  "config": {
+    "allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true,
+      "automattic/jetpack-autoloader": true
+    }
+  }
+}
