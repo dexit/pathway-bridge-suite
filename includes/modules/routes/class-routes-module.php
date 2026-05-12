@@ -9,13 +9,14 @@ namespace PATHWAY_BRIDGE_SUITE\Modules\Routes;
 
 use PATHWAY_BRIDGE_SUITE\Registry;
 use PATHWAY_BRIDGE_SUITE\Workflow_Engine;
+use PATHWAY_BRIDGE_SUITE\Workflow\Transformer;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit();
 }
 
 /**
- * Module for custom WP REST API Routes.
+ * Module for custom WP REST API Routes with Block Model support.
  */
 class Routes_Module {
 
@@ -29,6 +30,9 @@ class Routes_Module {
 	private function init() {
 		add_action( 'init', array( $this, 'register_post_type' ) );
 		add_action( 'rest_api_init', array( $this, 'init_rest_server' ) );
+
+		// Create Content Model paradigm: Register route meta for Block Binding
+		add_action( 'init', array( $this, 'register_route_meta' ) );
 	}
 
 	public function register_post_type() {
@@ -37,8 +41,23 @@ class Routes_Module {
 				'name' => __( 'Routes Bridges', 'pathway-bridge-suite' ),
 			),
 			'public' => false,
-			'show_ui' => false,
-			'supports' => array( 'title', 'editor', 'excerpt' ),
+			'show_ui' => true,
+			'show_in_rest' => true, // Enabled for Block Editor / Create Content Model integration
+			'supports' => array( 'title', 'editor', 'excerpt', 'custom-fields' ),
+			'menu_icon' => 'dashicons-rest-api',
+		) );
+	}
+
+	public function register_route_meta() {
+		register_post_meta( self::POST_TYPE, '_pbs_endpoint', array(
+			'show_in_rest' => true,
+			'single' => true,
+			'type' => 'string',
+		) );
+		register_post_meta( self::POST_TYPE, '_pbs_method', array(
+			'show_in_rest' => true,
+			'single' => true,
+			'type' => 'string',
 		) );
 	}
 
@@ -48,30 +67,14 @@ class Routes_Module {
 		$server->register_routes();
 	}
 
-	/**
-	 * Process an incoming request for a specific route.
-	 *
-	 * @param array $payload Data from the REST request.
-	 * @param int   $route_id The ID of the pbs-route post.
-	 *
-	 * @return mixed
-	 */
 	public function process_request( $payload, $route_id ) {
-		$jobs = get_post_meta( $route_id, '_pbs_workflow_jobs', true ) ?: array();
-		
-		// Optionally apply DTO mapping here
 		$mapping = get_post_meta( $route_id, '_pbs_mapping', true );
-		if ( $mapping ) {
-			$payload = $this->apply_mapping( $payload, $mapping );
+		if ( $mapping && is_array( $mapping ) ) {
+			$payload = Transformer::map( $payload, $mapping );
 		}
 
+		$jobs = get_post_meta( $route_id, '_pbs_workflow_jobs', true ) ?: array();
 		return Workflow_Engine::get_instance()->execute( $payload, $jobs, $this );
-	}
-
-	private function apply_mapping( $payload, $mapping ) {
-		// Implementation for DTO/ETL mapping
-		// (Will reuse the Field_Mapper logic from forms-bridge)
-		return $payload;
 	}
 }
 

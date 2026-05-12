@@ -1,17 +1,21 @@
 # AGENTS.md
-## Developer/Agent Guidelines
+## Developer & AI Guidelines
 
-### System Architecture
-- **Core**: `Pathway_Bridge_Suite` class.
-- **Modules**: Located in `includes/modules/`.
-- **Logic**: Jobs are handled by the `Workflow_Engine`.
+### Architecture: The Bridge Paradigm
+The suite follows a unified "Bridge" paradigm where data flows from **Entry Points** to **Workflow Jobs**.
 
-### How to add a new Bridge
-1. Create a new module in `includes/modules/`.
-2. Register it in `Pathway_Bridge_Suite::load_modules()`.
-3. Implement the `Module` interface or extend the base module class.
+- **Entry Points**:
+  - **REST Receiver Routes**: Dynamically registered via `includes/modules/routes/class-rest-server.php`.
+  - **Form Submissions**: Captured via `includes/modules/forms/class-forms-module.php`.
+  - **Post Transitions**: Triggered via `includes/modules/posts/class-posts-module.php`.
+- **DTO/ETL Mapping**: All entry points support a `_pbs_mapping` meta field processed by the `Transformer`.
+- **Workflow Engine**: Orchestrates execution of `Job` instances.
 
-### Code Standards
-- Use PHP 8.0+ features.
-- Follow WordPress Coding Standards.
-- Maintain strict typing where possible.
+### Security & Compliance
+- **Rate Limiting**: Use `Rate_Limiter::check()` at all entry points.
+- **Authentication**: REST routes support `api_key`, `hubspot`, and `twilio` signature verification.
+- **Data Safety**: `eval` is used for custom snippets; ensure post content is sanitized and only editable by admins.
+
+### Extending
+- **New Modules**: Register in `Pathway_Bridge_Suite::load_modules()`.
+- **Custom Actions**: Implement as a static method in a class and register as a Job.

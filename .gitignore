@@ -1,0 +1,7 @@
+node_modules/
+vendor/
+temp_repos/
+esbuild/dev.cjs
+esbuild/build.cjs
+.git/
+pathway-bridge.log

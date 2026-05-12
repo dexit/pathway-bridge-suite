@@ -9,6 +9,8 @@ namespace PATHWAY_BRIDGE_SUITE\Modules\Forms;
 
 use PATHWAY_BRIDGE_SUITE\Registry;
 use PATHWAY_BRIDGE_SUITE\Workflow_Engine;
+use PATHWAY_BRIDGE_SUITE\Rate_Limiter;
+use PATHWAY_BRIDGE_SUITE\Logger;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit();
@@ -39,7 +41,7 @@ class Forms_Module {
 				'name' => __( 'Form Bridges', 'pathway-bridge-suite' ),
 			),
 			'public' => false,
-			'show_ui' => false,
+			'show_ui' => true,
 			'supports' => array( 'title', 'excerpt' ),
 		) );
 	}
@@ -76,6 +78,16 @@ class Forms_Module {
 		) );
 
 		foreach ( $bridges as $bridge ) {
+			// Rate Limiting
+			$limit  = (int) get_post_meta( $bridge->ID, '_pbs_rate_limit', true ) ?: 10;
+			$period = (int) get_post_meta( $bridge->ID, '_pbs_rate_period', true ) ?: 60;
+			$ip     = $_SERVER['REMOTE_ADDR'];
+
+			if ( ! Rate_Limiter::check( "form_" . $bridge->ID . "_" . $ip, $limit, $period ) ) {
+				Logger::log( "Form submission rate limit exceeded for bridge " . $bridge->ID, Logger::ERROR );
+				continue;
+			}
+
 			$jobs = get_post_meta( $bridge->ID, '_pbs_workflow_jobs', true ) ?: array();
 			Workflow_Engine::get_instance()->execute( $payload, $jobs, $this );
 		}

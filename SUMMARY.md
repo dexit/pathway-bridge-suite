@@ -8,4 +8,5 @@ A unified connectivity hub for WordPress that merges three existing bridge plugi
 - Consolidated 3 plugins into 1 modular architecture.
 - Implemented "Routes Bridge" for dynamic REST API endpoint registration.
 - Native Elementor Form auto-capture integration.
-- Unified React-based administration dashboard.
+- Advanced DTO/ETL Transformer with nested mapping and SEO expansion support.
+- Integrated Rate Limiting and Job Queueing.

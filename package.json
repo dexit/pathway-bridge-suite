@@ -1,0 +1,21 @@
+{
+  "name": "pathway-bridge-suite",
+  "version": "1.0.0",
+  "description": "Enterprise React Dashboard for Pathway Bridge Suite",
+  "author": "codeccoop",
+  "license": "GPL-2.0-or-later",
+  "scripts": {
+    "build": "node esbuild/build.cjs",
+    "dev": "node esbuild/dev.cjs",
+    "prod": "./bin/build.sh"
+  },
+  "devDependencies": {
+    "esbuild": "^0.24.2",
+    "eslint": "^9.19.0"
+  },
+  "dependencies": {
+    "@automattic/jetpack-components": "^1.0.0",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  }
+}
