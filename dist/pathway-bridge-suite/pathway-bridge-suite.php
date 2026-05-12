@@ -7,7 +7,7 @@
  * Author URI:          https://www.codeccoop.org
  * License:             GPLv2 or later
  * Text Domain:         pathway-bridge-suite
- * Version:             1.0.1
+ * Version:             1.0.0
  * Requires PHP:        8.0
  * Requires at least:   6.9
  *
@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 define( 'PATHWAY_BRIDGE_SUITE_INDEX', __FILE__ );
 define( 'PATHWAY_BRIDGE_SUITE_DIR', __DIR__ );
-define( 'PATHWAY_BRIDGE_SUITE_VERSION', '1.0.1' );
+define( 'PATHWAY_BRIDGE_SUITE_VERSION', '1.0.0' );
 
 // Load Jetpack Autoloader if available, fallback to internal deps
 if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {

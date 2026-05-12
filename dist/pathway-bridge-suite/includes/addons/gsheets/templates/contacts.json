@@ -1,0 +1,47 @@
+{
+  "title": "Contacts",
+  "description": "Simple contact form connected to a spreadsheet",
+  "fields": [
+    {
+      "ref": "#form",
+      "name": "title",
+      "default": "Contacts"
+    }
+  ],
+  "form": {
+    "title": "Contacts",
+    "fields": [
+      {
+        "name": "email",
+        "label": "Your email",
+        "type": "email",
+        "required": true
+      },
+      {
+        "name": "firstname",
+        "label": "Your first name",
+        "type": "text",
+        "required": true
+      },
+      {
+        "name": "lastname",
+        "label": "Your last name",
+        "type": "text",
+        "required": true
+      },
+      {
+        "name": "phone",
+        "label": "Your phone",
+        "type": "tel"
+      }
+    ]
+  },
+  "bridge": {
+    "custom_fields": [
+      {
+        "name": "language",
+        "value": "$language"
+      }
+    ]
+  }
+}
