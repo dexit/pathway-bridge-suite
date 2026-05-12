@@ -62,6 +62,7 @@ class Pathway_Bridge_Suite extends \WPCT_PLUGIN\Plugin {
 		require_once PATHWAY_BRIDGE_SUITE_DIR . '/includes/workflow/class-job.php';
 		require_once PATHWAY_BRIDGE_SUITE_DIR . '/includes/workflow/class-http-job.php';
 		require_once PATHWAY_BRIDGE_SUITE_DIR . '/includes/workflow/class-webhook-job.php';
+require_once PATHWAY_BRIDGE_SUITE_DIR . '/includes/workflow/class-mail-job.php';
 		require_once PATHWAY_BRIDGE_SUITE_DIR . '/includes/workflow/class-rest-job.php';
 		require_once PATHWAY_BRIDGE_SUITE_DIR . '/includes/workflow/class-queue.php';
 	}

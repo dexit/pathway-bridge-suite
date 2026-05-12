@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Native Elementor Form integration.
+ * Native Elementor Form integration with File Upload support.
  */
 class Elementor_Bridge {
 
@@ -35,6 +35,7 @@ class Elementor_Bridge {
 		$form_name = $record->get_form_settings( 'form_name' );
 		$fields    = $record->get( 'fields' );
 		$meta      = $record->get( 'meta' );
+		$files     = $record->get( 'files' ); // Capture uploaded files
 		
 		$payload = array(
 			'_form_id'   => $form_id,
@@ -42,12 +43,25 @@ class Elementor_Bridge {
 			'_timestamp' => time(),
 			'fields'     => array(),
 			'meta'       => $meta,
+			'files'      => array(),
 		);
 
 		foreach ( $fields as $id => $field ) {
 			$payload['fields'][ $id ] = $field['value'];
-			// Also flatten for easier mapping if preferred
 			$payload[ $id ] = $field['value'];
+		}
+
+		if ( ! empty( $files ) ) {
+			foreach ( $files as $id => $file_data ) {
+				$payload['files'][ $id ] = array(
+					'path' => $file_data['path'] ?? '',
+					'url'  => $file_data['url'] ?? '',
+					'type' => $file_data['type'] ?? '',
+					'name' => $file_data['name'] ?? '',
+				);
+				// Also include URL in main payload for easy mapping
+				$payload[ $id . '_url' ] = $file_data['url'] ?? '';
+			}
 		}
 
 		// Send to Forms Module for processing
@@ -57,11 +71,6 @@ class Elementor_Bridge {
 		}
 	}
 
-	/**
-	 * Register custom action for Elementor Pro Forms.
-	 *
-	 * @param \ElementorPro\Modules\Forms\Registrar $registrar
-	 */
 	public function register_action( $registrar ) {
 		require_once __DIR__ . '/class-elementor-action.php';
 		$registrar->register( new Elementor_Action() );

@@ -6,7 +6,8 @@
   "license": "GPL-2.0-or-later",
   "scripts": {
     "build": "node esbuild/build.cjs",
-    "dev": "node esbuild/dev.cjs"
+    "dev": "node esbuild/dev.cjs",
+    "prod": "./bin/build.sh"
   },
   "devDependencies": {
     "esbuild": "^0.24.2",
