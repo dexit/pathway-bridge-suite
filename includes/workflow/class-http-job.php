@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Standard job to perform HTTP requests.
+ * Standard job to perform HTTP requests with ODATA support.
  */
 class HTTP_Job {
 
@@ -39,7 +39,7 @@ class HTTP_Job {
 		$backend = Backend::get( $backend_name );
 		if ( ! $backend ) {
 			Logger::log( "HTTP Backend not found: " . $backend_name, Logger::ERROR );
-			return $payload; // Skip or error? Usually skip with log.
+			return $payload;
 		}
 
 		$method   = strtoupper( $config['method'] ?? 'POST' );
@@ -47,7 +47,12 @@ class HTTP_Job {
 		$headers  = $config['headers'] ?? array();
 		$params   = $config['params'] ?? array();
 
-		// Replace placeholders in endpoint, headers and params
+		// ODATA Handling
+		if ( ! empty( $config['odata'] ) ) {
+			$params = array_merge( $params, self::build_odata_query( $config['odata'], $payload ) );
+		}
+
+		// Replace placeholders
 		$endpoint = self::replace_placeholders( $endpoint, $payload );
 		$headers  = self::replace_placeholders( $headers, $payload );
 		$params   = self::replace_placeholders( $params, $payload );
@@ -69,12 +74,29 @@ class HTTP_Job {
 			return $response;
 		}
 
-		// Optionally merge response back into payload
 		if ( ! empty( $config['response_field'] ) ) {
 			$payload[ $config['response_field'] ] = $response['data'] ?? $response['body'];
 		}
 
 		return $payload;
+	}
+
+	private static function build_odata_query( $odata_config, $payload ) {
+		$query = array();
+
+		if ( ! empty( $odata_config['filter'] ) ) {
+			$query['$filter'] = self::replace_placeholders( $odata_config['filter'], $payload );
+		}
+
+		if ( ! empty( $odata_config['select'] ) ) {
+			$query['$select'] = $odata_config['select'];
+		}
+
+		if ( ! empty( $odata_config['expand'] ) ) {
+			$query['$expand'] = $odata_config['expand'];
+		}
+
+		return $query;
 	}
 
 	/**
@@ -94,7 +116,10 @@ class HTTP_Job {
 
 		return preg_replace_callback( '/\{([^\}]+)\}/', function ( $matches ) use ( $payload ) {
 			$key = $matches[1];
-			return $payload[ $key ] ?? $matches[0];
+			$val = $payload[ $key ] ?? null;
+
+			if ( is_array($val) ) return json_encode($val);
+			return (string)($val ?? $matches[0]);
 		}, $input );
 	}
 }

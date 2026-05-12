@@ -76,6 +76,7 @@ add_action( 'plugins_loaded', function () {
 // Load Workflow Jobs
 require_once PATHWAY_BRIDGE_SUITE_DIR . '/includes/workflow/class-http-job.php';
 require_once PATHWAY_BRIDGE_SUITE_DIR . '/includes/workflow/class-rest-job.php';
+require_once PATHWAY_BRIDGE_SUITE_DIR . '/includes/workflow/class-webhook-job.php';
 require_once PATHWAY_BRIDGE_SUITE_DIR . '/includes/workflow/class-transformer.php';
 require_once PATHWAY_BRIDGE_SUITE_DIR . '/includes/class-rate-limiter.php';
 require_once PATHWAY_BRIDGE_SUITE_DIR . '/includes/workflow/class-queue.php';
