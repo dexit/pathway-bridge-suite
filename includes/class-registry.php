@@ -54,4 +54,15 @@ class Registry extends Singleton {
 	public function get_modules() {
 		return $this->modules;
 	}
+
+	/**
+	 * Find the key for a given module instance.
+	 *
+	 * @param mixed $instance Module instance.
+	 *
+	 * @return string|null
+	 */
+	public function get_key( $instance ) {
+		return array_search( $instance, $this->modules, true ) ?: null;
+	}
 }

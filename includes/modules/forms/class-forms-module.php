@@ -89,7 +89,7 @@ class Forms_Module {
 			}
 
 			$jobs = get_post_meta( $bridge->ID, '_pbs_workflow_jobs', true ) ?: array();
-			Workflow_Engine::get_instance()->execute( $payload, $jobs, $this );
+			Workflow_Engine::get_instance()->execute( $payload, $jobs, $this, $bridge->ID );
 		}
 	}
 }

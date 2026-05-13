@@ -22,5 +22,11 @@
       "dealerdirect/phpcodesniffer-composer-installer": true,
       "automattic/jetpack-autoloader": true
     }
+  },
+  "autoload": {
+    "classmap": [
+      "deps/plugin/",
+      "deps/http/"
+    ]
   }
 }

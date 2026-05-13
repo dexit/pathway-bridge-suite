@@ -20,6 +20,12 @@
 - CPT-to-External sync logic.
 
 ### 5. Workflow Engine
-- DTO/ETL pipeline.
+- DTO/ETL pipeline with dot-notation nested mapping support.
 - Multi-recipient webhook dispatching.
-- Debug console for job monitoring.
+- Persistent Job Monitoring with per-execution logging.
+- Manual Retry capability for failed workflow jobs.
+
+### 6. Advanced Connectivity
+- HTTP Job with dynamic header and payload mapping.
+- Support for complex JSON object transformations.
+- Integrated Rate Limiting per entry point.

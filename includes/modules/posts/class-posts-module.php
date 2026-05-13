@@ -69,7 +69,7 @@ class Posts_Module {
 
 		foreach ( $bridges as $bridge ) {
 			$jobs = get_post_meta( $bridge->ID, '_pbs_workflow_jobs', true ) ?: array();
-			Workflow_Engine::get_instance()->execute( $bridge_payload, $jobs, $this );
+			Workflow_Engine::get_instance()->execute( $bridge_payload, $jobs, $this, $bridge->ID );
 		}
 
 		return $payload; // Return original payload for VIP plugin to continue
@@ -97,7 +97,7 @@ class Posts_Module {
 		
 		if ( $post_id ) {
 			$payload = $this->prepare_post_payload( $post_id );
-			return Workflow_Engine::get_instance()->execute( $payload, $jobs, $this );
+			return Workflow_Engine::get_instance()->execute( $payload, $jobs, $this, $bridge_id );
 		}
 	}
 

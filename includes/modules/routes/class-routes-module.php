@@ -74,7 +74,7 @@ class Routes_Module {
 		}
 
 		$jobs = get_post_meta( $route_id, '_pbs_workflow_jobs', true ) ?: array();
-		return Workflow_Engine::get_instance()->execute( $payload, $jobs, $this );
+		return Workflow_Engine::get_instance()->execute( $payload, $jobs, $this, $route_id );
 	}
 }
 

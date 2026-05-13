@@ -10,3 +10,4 @@ A unified connectivity hub for WordPress that merges three existing bridge plugi
 - Native Elementor Form auto-capture integration.
 - Advanced DTO/ETL Transformer with nested mapping and SEO expansion support.
 - Integrated Rate Limiting and Job Queueing.
+- Fixed critical production activation bug (Fatal Error: Class "WPCT_PLUGIN\Plugin" not found) by correcting dependency loading order and hardening internal paths.

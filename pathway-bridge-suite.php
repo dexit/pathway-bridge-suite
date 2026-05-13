@@ -22,12 +22,13 @@ define( 'PATHWAY_BRIDGE_SUITE_INDEX', __FILE__ );
 define( 'PATHWAY_BRIDGE_SUITE_DIR', __DIR__ );
 define( 'PATHWAY_BRIDGE_SUITE_VERSION', '1.0.1' );
 
-// Load Jetpack Autoloader if available, fallback to internal deps
+// Load internal deps
+require_once __DIR__ . '/deps/plugin/class-plugin.php';
+require_once __DIR__ . '/deps/http/index.php';
+
+// Load Jetpack Autoloader if available
 if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
 	require_once __DIR__ . '/vendor/autoload.php';
-} else {
-	require_once __DIR__ . '/deps/plugin/class-plugin.php';
-	require_once __DIR__ . '/deps/http/index.php';
 }
 
 /**
@@ -43,6 +44,7 @@ class Pathway_Bridge_Suite extends \WPCT_PLUGIN\Plugin {
 		$this->load_modules();
 		$this->load_addons();
 
+		Job_Manager::get_instance()->init();
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_assets' ) );
 	}
 
@@ -51,6 +53,7 @@ class Pathway_Bridge_Suite extends \WPCT_PLUGIN\Plugin {
 		require_once PATHWAY_BRIDGE_SUITE_DIR . '/includes/class-workflow-engine.php';
 		require_once PATHWAY_BRIDGE_SUITE_DIR . '/includes/class-logger.php';
 		require_once PATHWAY_BRIDGE_SUITE_DIR . '/includes/class-rate-limiter.php';
+		require_once PATHWAY_BRIDGE_SUITE_DIR . '/includes/class-job-manager.php';
 
 		// Bridge Modules
 		require_once PATHWAY_BRIDGE_SUITE_DIR . '/includes/modules/forms/class-forms-module.php';

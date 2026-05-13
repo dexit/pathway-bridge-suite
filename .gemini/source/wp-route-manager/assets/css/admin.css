@@ -1,0 +1,249 @@
+/* WP Route Manager — Admin Styles */
+
+/* ── Layout ────────────────────────────────────────────────────────────────── */
+.wprm-wrap { max-width: 1400px; }
+.wprm-wrap h1 .dashicons { vertical-align: middle; font-size: 28px; line-height: 1; margin-right: 4px; }
+
+.wprm-dashboard-cols {
+	display: grid;
+	grid-template-columns: 1fr 380px;
+	gap: 24px;
+	margin-top: 24px;
+}
+@media (max-width: 1100px) { .wprm-dashboard-cols { grid-template-columns: 1fr; } }
+
+/* ── Stat Grid ──────────────────────────────────────────────────────────────── */
+.wprm-stat-grid {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	gap: 16px;
+	margin: 20px 0;
+}
+@media (max-width: 900px) { .wprm-stat-grid { grid-template-columns: repeat(2, 1fr); } }
+
+.wprm-stat-card {
+	background: #fff;
+	border: 1px solid #e2e4e7;
+	border-radius: 6px;
+	padding: 20px;
+	text-align: center;
+	box-shadow: 0 1px 3px rgba(0,0,0,.05);
+}
+.wprm-stat-card--warn { border-color: #f0b849; background: #fffdf0; }
+.wprm-stat-icon { font-size: 28px; color: #0073aa; display: block; margin-bottom: 8px; }
+.wprm-stat-number { font-size: 36px; font-weight: 700; color: #1d2327; line-height: 1; }
+.wprm-stat-label { font-size: 13px; color: #50575e; margin: 4px 0 10px; }
+.wprm-error-badge {
+	display: inline-block;
+	background: #dc3232;
+	color: #fff;
+	font-size: 11px;
+	padding: 2px 7px;
+	border-radius: 20px;
+	font-weight: 600;
+	margin-bottom: 8px;
+}
+
+/* ── Cards ──────────────────────────────────────────────────────────────────── */
+.wprm-card {
+	background: #fff;
+	border: 1px solid #e2e4e7;
+	border-radius: 6px;
+	padding: 20px 24px;
+	margin: 20px 0;
+	box-shadow: 0 1px 3px rgba(0,0,0,.05);
+}
+
+/* ── Badges ─────────────────────────────────────────────────────────────────── */
+.wprm-badge {
+	display: inline-block;
+	color: #fff;
+	font-size: 11px;
+	font-weight: 700;
+	padding: 2px 8px;
+	border-radius: 3px;
+	letter-spacing: .5px;
+	text-transform: uppercase;
+}
+.wprm-badge-small {
+	display: inline-block;
+	background: #e2e4e7;
+	color: #50575e;
+	font-size: 11px;
+	padding: 1px 6px;
+	border-radius: 3px;
+	margin: 1px;
+}
+
+/* ── Status Pill ────────────────────────────────────────────────────────────── */
+.wprm-status {
+	display: inline-block;
+	font-size: 12px;
+	font-weight: 600;
+	padding: 2px 10px;
+	border-radius: 20px;
+}
+.wprm-status--active   { background: #d7f0dc; color: #1a7928; }
+.wprm-status--inactive { background: #e8e8e8; color: #666; }
+.wprm-status--error    { background: #fce8e8; color: #dc3232; }
+
+/* ── Route URL code ─────────────────────────────────────────────────────────── */
+.wprm-route-url {
+	font-size: 11px;
+	word-break: break-all;
+	background: #f6f7f7;
+	padding: 2px 6px;
+	border-radius: 3px;
+}
+.wprm-url-block {
+	display: block;
+	background: #1d2327;
+	color: #a8c5da;
+	padding: 10px 14px;
+	border-radius: 4px;
+	font-size: 12px;
+	line-height: 1.8;
+	white-space: pre;
+	overflow-x: auto;
+	margin-bottom: 12px;
+}
+
+/* ── Key Reveal ─────────────────────────────────────────────────────────────── */
+.wprm-notice-key { padding: 14px 16px !important; }
+.wprm-notice-key h3 { margin-top: 0; }
+.wprm-key-reveal {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	flex-wrap: wrap;
+}
+.wprm-key-reveal code {
+	background: #1d2327;
+	color: #8ed4f5;
+	padding: 8px 14px;
+	border-radius: 4px;
+	font-size: 13px;
+	letter-spacing: .5px;
+	user-select: all;
+	word-break: break-all;
+}
+.wprm-copy-btn.copied { background: #46b450 !important; color: #fff !important; border-color: #46b450 !important; }
+
+/* ── Filter Bar ─────────────────────────────────────────────────────────────── */
+.wprm-filter-bar {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin: 16px 0;
+	flex-wrap: wrap;
+}
+
+/* ── Modal ──────────────────────────────────────────────────────────────────── */
+.wprm-modal { position: fixed; inset: 0; z-index: 100000; display: flex; align-items: flex-start; justify-content: center; padding-top: 60px; }
+.wprm-modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.6); }
+.wprm-modal-box {
+	position: relative;
+	background: #fff;
+	border-radius: 8px;
+	width: min(90vw, 900px);
+	max-height: 80vh;
+	display: flex;
+	flex-direction: column;
+	box-shadow: 0 8px 32px rgba(0,0,0,.3);
+	z-index: 1;
+}
+.wprm-modal-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 16px 20px;
+	border-bottom: 1px solid #e2e4e7;
+}
+.wprm-modal-header h2 { margin: 0; font-size: 18px; }
+.wprm-modal-close { background: none; border: none; font-size: 20px; cursor: pointer; color: #666; padding: 4px 8px; border-radius: 4px; }
+.wprm-modal-close:hover { background: #f0f0f0; }
+.wprm-modal-body { padding: 16px 20px; overflow-y: auto; flex: 1; }
+
+.wprm-log-meta { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-bottom: 16px; font-size: 13px; color: #50575e; }
+
+/* ── Modal Tabs ─────────────────────────────────────────────────────────────── */
+.wprm-log-tabs {
+	display: flex;
+	gap: 2px;
+	border-bottom: 2px solid #e2e4e7;
+	margin-bottom: 16px;
+}
+.wprm-tab-btn {
+	background: none;
+	border: none;
+	padding: 8px 16px;
+	cursor: pointer;
+	font-size: 13px;
+	color: #50575e;
+	border-bottom: 2px solid transparent;
+	margin-bottom: -2px;
+}
+.wprm-tab-btn.active, .wprm-tab-btn:hover { color: #0073aa; }
+.wprm-tab-btn.active { border-bottom-color: #0073aa; font-weight: 600; }
+.wprm-tab-panel { display: none; }
+.wprm-tab-panel.active { display: block; }
+
+/* ── Pre blocks ─────────────────────────────────────────────────────────────── */
+.wprm-pre {
+	background: #f6f7f7;
+	border: 1px solid #e2e4e7;
+	border-radius: 4px;
+	padding: 12px;
+	font-size: 12px;
+	line-height: 1.7;
+	overflow: auto;
+	max-height: 300px;
+	white-space: pre-wrap;
+	word-break: break-word;
+	margin: 4px 0 16px;
+}
+.wprm-pre--error { background: #fce8e8; border-color: #f5aaaa; color: #a00; }
+
+/* ── Demo list ──────────────────────────────────────────────────────────────── */
+.wprm-demo-list { list-style: none; padding: 0; }
+.wprm-demo-list li { margin: 8px 0; }
+.wprm-demo-list code { display: block; font-size: 11px; word-break: break-all; }
+.wprm-demo-list small { color: #777; font-size: 11px; }
+
+/* ── Code Editor wrapper ────────────────────────────────────────────────────── */
+.wprm-code-editor-field textarea { font-family: monospace; font-size: 13px; }
+.CodeMirror { min-height: 400px; border: 1px solid #ddd; border-radius: 4px; }
+
+/* ── Missing classes used in templates ──────────────────────────────────────── */
+.wprm-dashboard-main { background:#fff; border:1px solid #e2e4e7; border-radius:6px; padding:20px 24px; }
+.wprm-dashboard-side { }
+.wprm-key-reveal-area { margin-top:12px; }
+.wprm-dep-notice { }
+
+/* Log modal tab panels */
+#wprm-tab-request,
+#wprm-tab-response,
+#wprm-tab-snippet,
+#wprm-tab-error { }
+
+/* Log modal meta IDs */
+#wprm-log-method,
+#wprm-log-code,
+#wprm-log-time,
+#wprm-log-ip,
+#wprm-log-duration { display:inline-block; }
+
+/* Pre blocks inside modal */
+#wprm-req-headers,
+#wprm-req-params,
+#wprm-req-body-raw,
+#wprm-req-body-parsed,
+#wprm-response-body,
+#wprm-snippet-output,
+#wprm-error-output { font-family:monospace; }
+
+/* Keys table */
+.wprm-keys-table { margin-top:20px; }
+
+/* Error badge in status */
+.wprm-status--error { background:#fce8e8; color:#dc3232; }

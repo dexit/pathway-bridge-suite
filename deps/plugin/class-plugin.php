@@ -17,10 +17,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit();
 }
 
-require_once 'class-singleton.php';
-require_once 'class-menu.php';
-require_once 'class-settings-form.php';
-require_once 'class-settings-store.php';
+require_once __DIR__ . '/class-singleton.php';
+require_once __DIR__ . '/class-menu.php';
+require_once __DIR__ . '/class-settings-form.php';
+require_once __DIR__ . '/class-settings-store.php';
 
 /**
  * Plugin abstract class.

@@ -15,11 +15,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit();
 }
 
-require_once 'class-singleton.php';
-require_once 'class-setting.php';
-require_once 'class-rest-settings-controller.php';
-require_once 'class-undefined.php';
-require_once 'json-schema-utils.php';
+require_once __DIR__ . '/class-singleton.php';
+require_once __DIR__ . '/class-setting.php';
+require_once __DIR__ . '/class-rest-settings-controller.php';
+require_once __DIR__ . '/class-undefined.php';
+require_once __DIR__ . '/json-schema-utils.php';
 
 /**
  * Settings store base class.

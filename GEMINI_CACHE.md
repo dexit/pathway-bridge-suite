@@ -5,6 +5,8 @@
 - Used `eval` for custom PHP snippet execution within the `Workflow\Job` class to provide maximum flexibility for custom logic, wrapping it to handle non-PHP starting tags.
 - Implemented a unified `Registry` to allow modules to interact without tight coupling.
 - `Transformer` class uses dot-notation for nested JSON pointer support in both source and target fields.
+- Fixed dependency loading by moving `deps/` requirements outside the `vendor/autoload.php` conditional check in `pathway-bridge-suite.php`.
+- Added `deps/` to `composer.json` classmap for autoloader compatibility.
 
 ### Known Limitations
 - `eval` usage requires careful administrative control; ensuring only authorized users can edit job post content is crucial.

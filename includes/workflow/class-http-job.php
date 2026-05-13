@@ -47,15 +47,15 @@ class HTTP_Job {
 		$headers  = $config['headers'] ?? array();
 		$params   = $config['params'] ?? array();
 
+		// Replace placeholders in config before processing
+		$endpoint = self::replace_placeholders( $endpoint, $payload );
+		$headers  = self::replace_placeholders( $headers, $payload );
+		$params   = self::replace_placeholders( $params, $payload );
+
 		// ODATA Handling
 		if ( ! empty( $config['odata'] ) ) {
 			$params = array_merge( $params, self::build_odata_query( $config['odata'], $payload ) );
 		}
-
-		// Replace placeholders
-		$endpoint = self::replace_placeholders( $endpoint, $payload );
-		$headers  = self::replace_placeholders( $headers, $payload );
-		$params   = self::replace_placeholders( $params, $payload );
 
 		Logger::log( "Executing HTTP request: [$method] $endpoint", Logger::INFO );
 
@@ -64,8 +64,14 @@ class HTTP_Job {
 		} else {
 			$data = $payload;
 			if ( isset( $config['payload_field'] ) ) {
-				$data = $payload[ $config['payload_field'] ] ?? array();
+				$data = self::get_nested_value( $payload, $config['payload_field'] ) ?? array();
 			}
+
+			// If data is a string but looks like JSON, decode it for the backend
+			if ( is_string( $data ) && ( str_starts_with( $data, '{' ) || str_starts_with( $data, '[' ) ) ) {
+				$data = json_decode( $data, true ) ?: $data;
+			}
+
 			$response = $backend->{strtolower($method)}( $endpoint, $data, $headers );
 		}
 
@@ -75,10 +81,31 @@ class HTTP_Job {
 		}
 
 		if ( ! empty( $config['response_field'] ) ) {
-			$payload[ $config['response_field'] ] = $response['data'] ?? $response['body'];
+			$response_data = $response['data'] ?? ( $response['body'] ?? $response );
+			$payload = self::set_nested_value( $payload, $config['response_field'], $response_data );
 		}
 
 		return $payload;
+	}
+
+	private static function get_nested_value( $array, $path ) {
+		$keys = explode( '.', $path );
+		foreach ( $keys as $key ) {
+			if ( ! isset( $array[ $key ] ) ) return null;
+			$array = $array[ $key ];
+		}
+		return $array;
+	}
+
+	private static function set_nested_value( $array, $path, $value ) {
+		$keys = explode( '.', $path );
+		$temp = &$array;
+		foreach ( $keys as $key ) {
+			if ( ! isset( $temp[ $key ] ) ) $temp[ $key ] = array();
+			$temp = &$temp[ $key ];
+		}
+		$temp = $value;
+		return $array;
 	}
 
 	private static function build_odata_query( $odata_config, $payload ) {
@@ -101,6 +128,7 @@ class HTTP_Job {
 
 	/**
 	 * Replace {field} placeholders with values from payload.
+	 * Supports dot-notation for nested fields.
 	 */
 	private static function replace_placeholders( $input, $payload ) {
 		if ( is_array( $input ) ) {
@@ -116,9 +144,9 @@ class HTTP_Job {
 
 		return preg_replace_callback( '/\{([^\}]+)\}/', function ( $matches ) use ( $payload ) {
 			$key = $matches[1];
-			$val = $payload[ $key ] ?? null;
+			$val = self::get_nested_value( $payload, $key );
 
-			if ( is_array($val) ) return json_encode($val);
+			if ( is_array($val) || is_object($val) ) return json_encode($val);
 			return (string)($val ?? $matches[0]);
 		}, $input );
 	}
